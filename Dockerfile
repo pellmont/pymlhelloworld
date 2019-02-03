@@ -6,15 +6,18 @@ COPY .condarc /opt/conda/
 COPY setup.* /app/
 COPY environment.yml /app/
 COPY pymlhelloworld /app/pymlhelloworld/
-COPY requirements.txt /app/
 COPY LICENSE /app/
+COPY requirements.txt /app/
+COPY requirements.dev.txt /app/
 COPY .coveragerc /app/
 WORKDIR /app
 RUN conda env create --file /app/environment.yml -p /env \
     && source activate /env \
-    && tox \
     && conda install uwsgi \
     && pip install -r requirements.txt \
+    && pip install -r requirements.dev.txt \
+    && pytest --cov=pymlhelloworld pymlhelloworld/tests \
+    && flake8 train \
     && pip install .
 
 FROM frolvlad/alpine-miniconda3
