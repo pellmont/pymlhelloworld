@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# input data files are usually very large and immutable
+# and should not be kept in version control but fetched from
+# other sources.
+*.csv
+*.zip
