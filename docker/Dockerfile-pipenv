@@ -1,0 +1,56 @@
+FROM python:3.7-alpine as ml-base
+
+MAINTAINER Pascal Pellmont <github@ppo2.ch>
+MAINTAINER Igor Dejanovic <igor.dejanovic@gmail.com>
+
+COPY setup.* /app/
+COPY pymlhelloworld /app/pymlhelloworld/
+COPY LICENSE /app/
+COPY Pipfile /app/
+COPY Pipfile.lock /app/
+COPY .coveragerc /app/
+WORKDIR /app
+
+RUN set -x \
+    && deps=' \
+    uwsgi \
+    uwsgi-python3 \
+    ' \
+    && apk --no-cache add --update --virtual .base-deps $deps
+RUN pip install pipenv && pipenv sync
+RUN pipenv install -e .
+
+
+FROM ml-base as ml-testing
+
+MAINTAINER Pascal Pellmont <github@ppo2.ch>
+MAINTAINER Igor Dejanovic <igor.dejanovic@gmail.com>
+
+COPY tests /app/tests
+WORKDIR /app
+RUN pipenv sync --dev
+RUN pipenv run pytest tests
+#RUN pipenv run pytest --cov=pymlhelloworld tests \
+#&& pipenv run flake8 train
+
+FROM ml-testing as ml-training
+
+MAINTAINER Pascal Pellmont <github@ppo2.ch>
+MAINTAINER Igor Dejanovic <igor.dejanovic@gmail.com>
+
+WORKDIR /app
+# Train model
+
+
+FROM ml-base as ml-production
+
+MAINTAINER Pascal Pellmont <github@ppo2.ch>
+MAINTAINER Igor Dejanovic <igor.dejanovic@gmail.com>
+
+WORKDIR /app
+EXPOSE 5000
+# Need to ensure uwsgi is working from the virtualenv
+CMD uwsgi --http 0.0.0.0:5000 --master --module pymlhelloworld.app:APP --processes 4
+
+
+

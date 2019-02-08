@@ -1,0 +1,5 @@
+.git
+**/*.py[cod]
+**/__pycache__
+**/*.zip
+**/*.csv
