@@ -10,14 +10,8 @@ COPY Pipfile /app/
 COPY Pipfile.lock /app/
 COPY .coveragerc /app/
 WORKDIR /app
-
-RUN set -x \
-    && deps=' \
-    uwsgi \
-    uwsgi-python3 \
-    ' \
-    && apk --no-cache add --update --virtual .base-deps $deps
-RUN pip install pipenv && pipenv sync
+ENV PIPENV_VENV_IN_PROJECT=True
+RUN pip install pipenv && pipenv sync && pipenv install gunicorn==19.9.0
 RUN pipenv install -e .
 
 
@@ -29,9 +23,8 @@ MAINTAINER Igor Dejanovic <igor.dejanovic@gmail.com>
 COPY tests /app/tests
 WORKDIR /app
 RUN pipenv sync --dev
-RUN pipenv run pytest tests
-#RUN pipenv run pytest --cov=pymlhelloworld tests \
-#&& pipenv run flake8 train
+RUN pipenv run pytest --cov=pymlhelloworld tests
+RUN pipenv run flake8 --teamcity train
 
 FROM ml-testing as ml-training
 
@@ -47,10 +40,10 @@ FROM ml-base as ml-production
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
 MAINTAINER Igor Dejanovic <igor.dejanovic@gmail.com>
 
+RUN adduser --system unicorn
+USER unicorn
 WORKDIR /app
 EXPOSE 5000
-# Need to ensure uwsgi is working from the virtualenv
-CMD uwsgi --http 0.0.0.0:5000 --master --module pymlhelloworld.app:APP --processes 4
-
+CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld.app:APP
 
 

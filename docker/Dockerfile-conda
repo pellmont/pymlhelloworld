@@ -1,34 +1,38 @@
-FROM frolvlad/alpine-miniconda3 as builder
+FROM python:3.7-alpine as pipenv
+LABEL image=pipenv
+RUN pip install --no-cache-dir pipenv==2018.11.26
 
-MAINTAINER Pascal Pellmont <github@ppo2.ch>
-
-COPY .condarc /opt/conda/
+FROM pipenv as builder
+LABEL image=base
+ENV PIPENV_VENV_IN_PROJECT=True
 COPY setup.* /app/
-COPY environment.yml /app/
 COPY pymlhelloworld /app/pymlhelloworld/
 COPY LICENSE /app/
-COPY requirements.txt /app/
-COPY requirements.dev.txt /app/
+COPY Pipfile* /app/
 COPY .coveragerc /app/
 WORKDIR /app
-RUN conda env create --file /app/environment.yml -p /env \
-    && source activate /env \
-    && conda install uwsgi \
-    && pip install -r requirements.txt \
-    && pip install -r requirements.dev.txt \
-    && pytest --cov=pymlhelloworld pymlhelloworld/tests \
-    && flake8 train \
-    && pip install .
+RUN pipenv install gunicorn==19.9.0 \
+    && pipenv install \
+    && pipenv install .
 
-FROM frolvlad/alpine-miniconda3
+FROM builder as test
+LABEL image=test
+RUN pip install --no-cache-dir pipenv==2018.11.26 \
+    && pipenv install --dev \
+    && pipenv run pytest --cov=pymlhelloworld pymlhelloworld/tests \
+    && pipenv run pylint pymlhelloworld \
+    && pipenv run flake8 --teamcity pymlhelloworld
 
+FROM python:3.7-alpine
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
+COPY --from=builder /app /app
 
-COPY --from=builder /env /env
 EXPOSE 5000
-RUN adduser --system uwsgi
-USER uwsgi
-CMD source activate /env && uwsgi --http 0.0.0.0:5000 --master --module pymlhelloworld.app:APP --processes 4
+RUN adduser --system unicorn \
+    && pip install --no-cache-dir pipenv==2018.11.26
+USER unicorn
+WORKDIR /app
+CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld.app:APP
 
 
 
