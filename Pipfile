@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+teamcity-messages = "==1.21"
 pytest = "==4.2.0"
 pytest-cov = "==2.6.1"
 pylint = "==2.2.2"
@@ -17,7 +18,6 @@ flake8-logging-format = "==0.6.0"
 flake8-string-format = "==0.2.3"
 flake8-colors = "==0.1.6"
 flake8-type-annotations = "==0.1.0"
-teamcity-messages = "==1.21"
 
 [packages]
 Flask = "==1.0.2"
