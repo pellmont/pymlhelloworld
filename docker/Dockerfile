@@ -22,9 +22,8 @@ RUN pipenv sync --dev \
     && pipenv run pylint pymlhelloworld tests \
     && pipenv run flake8 --teamcity pymlhelloworld tests
 
-FROM python:3.7-alpine
+FROM builder
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
-COPY --from=builder /app /app
 
 EXPOSE 5000
 RUN adduser --system unicorn
