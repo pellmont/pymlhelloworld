@@ -16,11 +16,11 @@ RUN pipenv sync \
 
 FROM builder as test
 LABEL image=test
-RUN pip install --no-cache-dir pipenv==2018.11.26 \
-    && pipenv install --dev \
-    && pipenv run pytest --cov=pymlhelloworld pymlhelloworld/tests \
-    && pipenv run pylint pymlhelloworld \
-    && pipenv run flake8 --teamcity pymlhelloworld
+COPY tests /app/tests
+RUN pipenv sync --dev \
+    && pipenv run pytest --cov=pymlhelloworld tests \
+    && pipenv run pylint pymlhelloworld tests \
+    && pipenv run flake8 --teamcity pymlhelloworld tests
 
 FROM python:3.7-alpine
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
