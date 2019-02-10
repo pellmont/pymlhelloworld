@@ -24,9 +24,9 @@ RUN pipenv run pytest \
 
 FROM test as train
 LABEL image=train
-RUN [ ! -f /app/model/model.py ] && jupyter nbconvert --to script model.ipynb
-RUN python model.py
-# TODO: The script should create pickled model
+RUN [ ! -f model/model.py ] && jupyter nbconvert --to script model.ipynb
+RUN python model/model.py
+# TODO: The output of model.py script should be pickled/persisted model
 
 # TODO: Should we make another stage to test trained model?
 
