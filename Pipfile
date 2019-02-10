@@ -23,6 +23,11 @@ flake8-type-annotations = "==0.1.0"
 Flask = "==1.0.2"
 Flask-RESTful = "==0.3.6"
 gunicorn = "==19.9.0"
+pandas = "==0.24.1"
+scikit-learn = "==0.20.2"
+numpy = "==1.16.1"
+scipy = "==1.2.1"
+matplotlib = "==3.0.2"
 pymlhelloworld = {editable = true,path = "."}
 
 [requires]
