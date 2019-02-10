@@ -10,6 +10,7 @@ COPY pymlhelloworld /app/pymlhelloworld/
 COPY LICENSE /app/
 COPY Pipfile* /app/
 COPY .coveragerc /app/
+COPY extract_code.sh /app/
 COPY run.sh /app/
 WORKDIR /app
 RUN pipenv sync
@@ -24,7 +25,7 @@ RUN pipenv run pytest \
 
 FROM test as train
 LABEL image=train
-RUN [ ! -f model/model.py ] && jupyter nbconvert --to script model.ipynb
+RUN [ ! -f model/model.py ] && /app/extract_code.sh
 RUN python model/model.py
 # TODO: The output of model.py script should be pickled/persisted model
 
