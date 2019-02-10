@@ -10,6 +10,7 @@ COPY pymlhelloworld /app/pymlhelloworld/
 COPY LICENSE /app/
 COPY Pipfile* /app/
 COPY .coveragerc /app/
+COPY run.sh /app/
 WORKDIR /app
 RUN pipenv sync
 
@@ -37,7 +38,7 @@ RUN adduser --system unicorn
 USER unicorn
 WORKDIR /app
 # TODO: Copy pickled model file to the appropriate location
-CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld.app:APP
+CMD ["/app/run.sh"]
 
 
 
