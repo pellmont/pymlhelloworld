@@ -11,25 +11,22 @@ COPY LICENSE /app/
 COPY Pipfile* /app/
 COPY .coveragerc /app/
 WORKDIR /app
-RUN pipenv install gunicorn==19.9.0 \
-    && pipenv install \
-    && pipenv install .
+RUN pipenv sync \
+    && pipenv install --skip-lock .
 
 FROM builder as test
 LABEL image=test
-RUN pip install --no-cache-dir pipenv==2018.11.26 \
-    && pipenv install --dev \
-    && pipenv run pytest --cov=pymlhelloworld pymlhelloworld/tests \
-    && pipenv run pylint pymlhelloworld \
-    && pipenv run flake8 --teamcity pymlhelloworld
+COPY tests /app/tests
+RUN pipenv sync --dev \
+    && pipenv run pytest --cov=pymlhelloworld tests \
+    && pipenv run pylint pymlhelloworld tests \
+    && pipenv run flake8 --teamcity pymlhelloworld tests
 
-FROM python:3.7-alpine
+FROM builder
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
-COPY --from=builder /app /app
 
 EXPOSE 5000
-RUN adduser --system unicorn \
-    && pip install --no-cache-dir pipenv==2018.11.26
+RUN adduser --system unicorn
 USER unicorn
 WORKDIR /app
 CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld.app:APP
