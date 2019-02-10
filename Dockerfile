@@ -16,8 +16,8 @@ RUN pipenv sync
 FROM builder as test
 LABEL image=test
 COPY tests /app/tests
-RUN pipenv sync --dev \
-    && pipenv run pytest \
+RUN pipenv sync --dev
+RUN pipenv run pytest \
     && pipenv run pylint pymlhelloworld tests \
     && pipenv run flake8 --teamcity pymlhelloworld tests
 
