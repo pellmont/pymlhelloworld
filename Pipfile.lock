@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5d090e49dbd686d5b3ff43a06c7a54b2bbc6b1512c300022acf3df60ca934860"
+            "sha256": "7c51bf00baf06e2510a4c8a2afacd8c6899977d082c9afc93e7ce7ca7a2e7073"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -100,6 +100,10 @@
                 "sha256:fb7c206e01ad85ce57feeaaa0bf784b97fa3cad0d4a5737bc5295785f5c613a1"
             ],
             "version": "==1.1.0"
+        },
+        "pymlhelloworld": {
+            "editable": true,
+            "path": "."
         },
         "pytz": {
             "hashes": [

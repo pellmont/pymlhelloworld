@@ -23,6 +23,7 @@ flake8-type-annotations = "==0.1.0"
 Flask = "==1.0.2"
 Flask-RESTful = "==0.3.6"
 gunicorn = "==19.9.0"
+pymlhelloworld = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"

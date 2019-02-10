@@ -11,8 +11,7 @@ COPY LICENSE /app/
 COPY Pipfile* /app/
 COPY .coveragerc /app/
 WORKDIR /app
-RUN pipenv sync \
-    && pipenv install --skip-lock .
+RUN pipenv sync
 
 FROM builder as test
 LABEL image=test
