@@ -1,3 +1,4 @@
+# pylint: disable=W0621
 import pytest
 from flask import url_for
 from pymlhelloworld import app

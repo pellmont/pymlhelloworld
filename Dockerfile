@@ -18,7 +18,7 @@ LABEL image=test
 COPY tests /app/tests
 RUN pipenv sync --dev \
     && pipenv run pytest \
-    && pipenv run pylint pymlhelloworld tests \
+    && pipenv run pylint --rcfile setup.cfg pymlhelloworld tests \
     && pipenv run flake8 --teamcity pymlhelloworld tests
 
 FROM builder
