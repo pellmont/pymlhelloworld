@@ -2,7 +2,7 @@
 This module implements prediction API.
 """
 from collections import namedtuple
-from flask_restplus import Namespace, Resource, fields, reqparse
+from flask_restplus import Namespace, Resource, fields
 
 api = Namespace('predict', description='Prediction related operations')
 
@@ -25,22 +25,21 @@ predict_input_params = (
     PredictParam('emp_lenght', type=int, required=True, help='???'),
 )
 
+predict_parser = api.parser()
+for param in predict_input_params:
+    predict_parser.add_argument(param.name,
+                                type=param.type,
+                                required=param.required,
+                                help=param.help)
+
 
 @api.route('/')
 class Predict(Resource):
     """
     Resource providing model prediction.
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Input Parameters
-        self.parser = reqparse.RequestParser()
-        for param in predict_input_params:
-            self.parser.add_argument(param.name,
-                                     type=param.type,
-                                     required=param.required,
-                                     help=param.help)
 
+    @api.expect(predict_parser)
     # @api.marshal_with(prediction)
     def post(self):
         """
@@ -49,5 +48,5 @@ class Predict(Resource):
         """
         # Parses and validates input arguments
         # In case of validation error HTTP 400 will be returned
-        data = self.parser.parse_args()
+        data = predict_parser.parse_args()
         return "Hello"  # Predictor.predict(data)
