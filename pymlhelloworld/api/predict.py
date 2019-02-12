@@ -3,10 +3,11 @@ This module implements prediction API.
 """
 from collections import namedtuple
 from flask_restplus import Namespace, Resource, fields
+from pymlhelloworld.model import PredictionModel
 
 api = Namespace('predict', description='Prediction related operations')
 
-prediction = api.model('Predict', {
+prediction = api.model('Prediction', {
     'good_loan': fields.Boolean(description='The prediction outcome'),
     'confidence': fields.Float(description='The prediction confidence')
 })
@@ -16,12 +17,12 @@ PredictParam = namedtuple('PredictParam', 'name type required help')
 # TODO: Correct meta-data for parameters (types, help messages...)
 predict_input_params = (
     PredictParam('home_ownership', type=int, required=True, help='???'),
-    PredictParam('purpose', type=int, required=True, help='???'),
+    PredictParam('purpose', type=str, required=True, help='???'),
     PredictParam('addr_state', type=int, required=True, help='???'),
-    PredictParam('loan_amnt', type=int, required=True, help='???'),
+    PredictParam('loan_amnt', type=float, required=True, help='???'),
     PredictParam('installement', type=int, required=True, help='???'),
-    PredictParam('annual_income', type=int, required=True, help='???'),
-    PredictParam('int_rate', type=int, required=True, help='???'),
+    PredictParam('annual_income', type=float, required=True, help='???'),
+    PredictParam('int_rate', type=float, required=True, help='???'),
     PredictParam('emp_lenght', type=int, required=True, help='???'),
 )
 
@@ -40,7 +41,7 @@ class Predict(Resource):
     """
 
     @api.expect(predict_parser)
-    # @api.marshal_with(prediction)
+    @api.marshal_with(prediction)
     def post(self):
         """
         Calls model prediction for the given parameters and return the
@@ -49,4 +50,4 @@ class Predict(Resource):
         # Parses and validates input arguments
         # In case of validation error HTTP 400 will be returned
         data = predict_parser.parse_args()
-        return "Hello"  # Predictor.predict(data)
+        return PredictionModel().predict(data), 200
