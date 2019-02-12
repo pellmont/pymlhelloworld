@@ -8,18 +8,18 @@ prediction = api.model('Predict', {
     'confidence': fields.Float(description='The prediction confidence')
 })
 
-P = namedtuple('PredictParam', 'name type required help')
+PredictParam = namedtuple('PredictParam', 'name type required help')
 
 # TODO: Correct meta-data for parameters (types, help messages...)
 predict_input_params = (
-    P('home_ownership', type=int, required=True, help='???'),
-    P('purpose', type=int, required=True, help='???'),
-    P('addr_state', type=int, required=True, help='???'),
-    P('loan_amnt', type=int, required=True, help='???'),
-    P('installement', type=int, required=True, help='???'),
-    P('annual_income', type=int, required=True, help='???'),
-    P('int_rate', type=int, required=True, help='???'),
-    P('emp_lenght', type=int, required=True, help='???'),
+    PredictParam('home_ownership', type=int, required=True, help='???'),
+    PredictParam('purpose', type=int, required=True, help='???'),
+    PredictParam('addr_state', type=int, required=True, help='???'),
+    PredictParam('loan_amnt', type=int, required=True, help='???'),
+    PredictParam('installement', type=int, required=True, help='???'),
+    PredictParam('annual_income', type=int, required=True, help='???'),
+    PredictParam('int_rate', type=int, required=True, help='???'),
+    PredictParam('emp_lenght', type=int, required=True, help='???'),
 )
 
 
