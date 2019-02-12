@@ -1,3 +1,6 @@
+"""
+Tests for predict API.
+"""
 # pylint: disable=W0621
 import pytest
 from flask import url_for
@@ -18,6 +21,9 @@ valid_data = {
 
 @pytest.fixture(scope="module")
 def ep():
+    """
+    Fixture for predict endpoint URL.
+    """
     with app.test_request_context():
         ep = url_for('predict_predict')
     return ep

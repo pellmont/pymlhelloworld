@@ -1,3 +1,6 @@
+"""
+This module collects all namespaces under a single API.
+"""
 from flask_restplus import Api
 
 from .predict import api as predict_api
