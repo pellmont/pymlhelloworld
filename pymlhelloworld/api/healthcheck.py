@@ -7,7 +7,7 @@ from flask_restplus import Resource, Namespace
 api = Namespace('healthcheck', description='Healthcheck operation')
 
 
-@api.route('/healthcheck')
+@api.route('/')
 class Health(Resource):
     """
     Health resource implements healthcheck API operations.
