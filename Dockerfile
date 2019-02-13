@@ -28,7 +28,7 @@ EXPOSE 5000
 RUN adduser --system unicorn
 USER unicorn
 WORKDIR /app
-CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld.app:APP
+CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld:app
 
 
 
