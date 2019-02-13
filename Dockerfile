@@ -21,6 +21,12 @@ RUN pipenv run pytest \
     && pipenv run pylint --rcfile setup.cfg pymlhelloworld tests \
     && pipenv run flake8 --teamcity pymlhelloworld tests
 
+# TODO: Make a model training stage
+
+
+# TODO: Make the model testing stage.
+# pytest should be called with --real-model parameter
+
 FROM builder
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
 
