@@ -1,10 +1,8 @@
-"""
-This module collects all namespaces under a single API.
-"""
+"""This module collects all namespaces under a single API."""
 from flask_restplus import Api
 
-from .predict import api as predict_api
 from .healthcheck import api as healthcheck_api
+from .predict import api as predict_api
 
 api = Api(
     title='Loan Prediction API',

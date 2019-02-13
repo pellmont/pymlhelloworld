@@ -1,32 +1,30 @@
 # pylint: disable= R0903,R0201
-"""
-Prediction model implementation.
-"""
+"""Prediction model implementation."""
 
 
 class Prediction:
-    """
-    Prediction class used to pass an answer from prediction model.
-    """
+    """Prediction class used to pass an answer from prediction model."""
+
     def __init__(self, good_loan=False, confidence=0):
+        """Initialize the prediction."""
         self.good_loan = good_loan
         self.confidence = confidence
 
 
 class PredictionModel:
-    """
+    """Prediction model used by the service.
+
     Prediction model loads persisted state from the training process and use
     model to do the prediction.
+
     """
 
     def __init__(self):
-        """
-        Load the persisted trained model.
-        """
+        """Load the persisted trained model."""
 
     def predict(self, input_args):
         """
-        Returns prediction based on the input arguments.
+        Return prediction based on the input arguments.
 
         :param input_args: The input data arguments.
         :type input_args: dict

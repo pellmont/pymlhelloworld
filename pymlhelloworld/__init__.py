@@ -5,6 +5,7 @@ Assembles all the REST endpoints.
 """
 
 from flask import Flask
+
 from .api import api
 
 

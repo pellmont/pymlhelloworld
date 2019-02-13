@@ -1,10 +1,10 @@
-"""
-Tests for predict API.
-"""
+"""Tests for predict API."""
 # pylint: disable=W0621
-import pytest
 from unittest.mock import patch
+
 from flask import url_for
+import pytest  # noqa
+
 from pymlhelloworld import app
 from pymlhelloworld import model
 
@@ -23,18 +23,14 @@ valid_data = {
 
 @pytest.fixture(scope="module")
 def ep_url():
-    """
-    Fixture for predict endpoint URL.
-    """
+    """Fixture for predict endpoint URL."""
     with app.test_request_context():
         ep = url_for('predict_predict')
     return ep
 
 
 def test_success_real_model(client, ep_url, real_model):
-    """
-    Tests that the proper response is given if the parameters are correct.
-    """
+    """Test that the proper response is given if the parameters are correct."""
     if not real_model:
         # If we are not running test with the real model we shall use a mocked
         # version.
@@ -52,7 +48,8 @@ def test_success_real_model(client, ep_url, real_model):
 
 
 def test_invalid_parameter_type(client, ep_url):
-    """
+    """Test invalid parameter type.
+
     Test that invalid parameter type will be rejected with the proper HTTP
     reponse code and message.
     """
@@ -66,7 +63,8 @@ def test_invalid_parameter_type(client, ep_url):
 
 
 def test_missing_required_parameter(client, ep_url):
-    """
+    """Test missing parameter.
+
     Test that payload with missing parameter will be rejected with the proper
     HTTP reponse code and message.
     """
