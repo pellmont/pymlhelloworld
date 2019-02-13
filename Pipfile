@@ -24,6 +24,9 @@ Flask = "==1.0.2"
 Flask-RESTful = "==0.3.6"
 gunicorn = "==19.9.0"
 pymlhelloworld = {editable = true,path = "."}
+numpy = "==1.16.0"
+scikit-learn = "==0.20.2"
+pandas = "==0.24.0"
 
 [requires]
 python_version = "3.7"
