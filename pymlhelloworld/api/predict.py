@@ -16,9 +16,9 @@ PredictParam = namedtuple('PredictParam', 'name type required help')
 
 # TODO: Correct meta-data for parameters (types, help messages...)
 predict_input_params = (
-    PredictParam('home_ownership', type=int, required=True, help='???'),
+    PredictParam('home_ownership', type=bool, required=True, help='???'),
     PredictParam('purpose', type=str, required=True, help='???'),
-    PredictParam('addr_state', type=int, required=True, help='???'),
+    PredictParam('addr_state', type=str, required=True, help='???'),
     PredictParam('loan_amnt', type=float, required=True, help='???'),
     PredictParam('installement', type=int, required=True, help='???'),
     PredictParam('annual_income', type=float, required=True, help='???'),
