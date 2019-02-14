@@ -38,7 +38,6 @@ RUN pipenv run pytest --real-model
 FROM builder
 MAINTAINER Pascal Pellmont <github@ppo2.ch>
 
-EXPOSE 5000
 WORKDIR /app
 COPY --from=train /app/model_info/index.html /app/model_info/
 RUN adduser --system unicorn
