@@ -18,6 +18,7 @@ flake8-logging-format = "==0.6.0"
 flake8-string-format = "==0.2.3"
 flake8-colors = "==0.1.6"
 flake8-type-annotations = "==0.1.0"
+jupyter = "==1.0.0"
 
 [packages]
 Flask = "==1.0.2"
