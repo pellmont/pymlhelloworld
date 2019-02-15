@@ -1,6 +1,6 @@
 """This module implements healthcheck API for monitoring."""
 # pragma: no cover
-from flask import abort, url_for
+from flask import abort, request, url_for
 
 from flask_restplus import Namespace, Resource
 
@@ -37,9 +37,14 @@ class Health(Resource):
         Call services of this application and verify that all endpoints
         behave as expected.
         """
-        predict_ep = url_for('predict_predict', _external=True)
+        predict_ep = url_for('predict_predict')
+        predict_url = 'http://{0}:{1}{2}'.format(
+            request.environ['SERVER_NAME'],
+            request.environ['SERVER_PORT'],
+            predict_ep)
         try:
-            r = requests.post(predict_ep, data=test_payload, timeout=0.5)
+            r = requests.post(predict_url,
+                              data=test_payload, timeout=0.02)
         except requests.exceptions.Timeout:
             abort(500)
 
