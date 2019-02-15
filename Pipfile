@@ -18,10 +18,11 @@ flake8-logging-format = "==0.6.0"
 flake8-string-format = "==0.2.3"
 flake8-colors = "==0.1.6"
 flake8-type-annotations = "==0.1.0"
+jupyter = "==1.0.0"
 
 [packages]
 Flask = "==1.0.2"
-Flask-RESTful = "==0.3.6"
+flask-restplus = "==0.12.1"
 gunicorn = "==19.9.0"
 pymlhelloworld = {editable = true,path = "."}
 numpy = "==1.16.0"
