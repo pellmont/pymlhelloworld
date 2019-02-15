@@ -6,16 +6,16 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from pymlhelloworld.train import ModelTrainer
-from pymlhelloworld.train import main
-from pymlhelloworld.train import read_data
-
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.metrics import f1_score
 from sklearn.pipeline import Pipeline
+
+from pymlhelloworld.train import ModelTrainer
+from pymlhelloworld.train import main
+from pymlhelloworld.train import read_data
 
 
 def test_train_and_pickle():
@@ -28,6 +28,7 @@ def test_train_and_pickle():
         ('classification', RandomForestClassifier())
     ])
     iris = datasets.load_iris()
+    # pylint: disable=E1101
     data = pd.DataFrame(iris.data)
     data['target'] = iris.target
     testee = ModelTrainer(pipeline, 'target')
@@ -66,7 +67,7 @@ def test_data_from_url():
                             'tmppickle.pkl', 'header'])
 @patch('pymlhelloworld.pipeline.init_pipeline')
 @patch('pymlhelloworld.train.read_data')
-def test_main(read_data, init_pipeline):
+def test_main(myreaddata, init_pipeline):
     """Test for main method."""
     # arrange
     pipeline = Pipeline([
@@ -75,9 +76,10 @@ def test_main(read_data, init_pipeline):
     ])
     init_pipeline.return_value = pipeline
     iris = datasets.load_iris()
+    # pylint: disable=E1101
     data = pd.DataFrame(iris.data)
     data['target'] = iris.target
-    read_data.return_value = data
+    myreaddata.return_value = data
 
     # act
     main()

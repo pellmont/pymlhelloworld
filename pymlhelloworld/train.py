@@ -5,10 +5,10 @@ from typing import Dict
 
 import pandas as pd
 
-import pymlhelloworld.pipeline
-
 import sklearn.pipeline
 from sklearn.model_selection import train_test_split
+
+import pymlhelloworld.pipeline
 
 
 class ModelTrainer():
