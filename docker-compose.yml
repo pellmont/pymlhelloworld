@@ -4,6 +4,8 @@ services:
     image: pyml-web
     restart: always
     build: ./web
+    environment:
+        - PYTHONUNBUFFERED=1
     expose:
       - "5000"
     volumes:
