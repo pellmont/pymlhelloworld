@@ -1,30 +1,27 @@
-"""
-Script to download the training data, train the model and output the serialized model.
-"""
-
-from typing import Dict
+"""Script to download the training data and train the model."""
 
 import pickle
+from typing import Dict
 
 import pandas as pd
-import sklearn.pipeline
-from sklearn.model_selection import train_test_split
 
 import pymlhelloworld.pipeline
 
+import sklearn.pipeline
+from sklearn.model_selection import train_test_split
+
 
 class ModelTrainer():
-    """
-    Constructor. Takes a preconfigured Pipeline.
-    """
+    """Constructor takes a preconfigured Pipeline."""
+
     def __init__(self, pipeline, target_col):
+        """Constructor."""
         self.pipeline = sklearn.base.clone(pipeline)
         self.target_col = target_col
         self.metrics = None
 
     def train(self, data):
-        """trains and evaluates the model."""
-
+        """Trains and evaluates the model."""
         train, valid = train_test_split(data,
                                         test_size=0.25,
                                         random_state=111)
@@ -37,13 +34,13 @@ class ModelTrainer():
         self.metrics = sklearn.metrics.classification_report(y_valid, y_pred)
 
     def write_pickled_model(self, outputfilename):
-        """writes the pickled model to a file."""
+        """Write the pickled model to file."""
         with open(outputfilename, 'wb') as file:
             pickle.dump(self.pipeline, file)
 
 
 def read_data(url: str, headers: Dict = None) -> pd.DataFrame:
-    """reads a CSV form an URL and put it in a pandas Dataframe."""
+    """Read a CSV form an URL and put it in a pandas Dataframe."""
     import urllib.request
     opener = urllib.request.build_opener(
         urllib.request.HTTPHandler(),
@@ -55,8 +52,9 @@ def read_data(url: str, headers: Dict = None) -> pd.DataFrame:
         data = pd.read_csv(file)
     return data
 
+
 def main():
-    """main method to train a model.
+    """Train the model.
 
     arguments: url outputfilename reqestheaders
     """

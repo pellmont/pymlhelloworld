@@ -1,5 +1,6 @@
-FROM python:3.7-alpine as pipenv
+FROM python:3.7-slim as pipenv
 LABEL image=pipenv
+#RUN echo "manylinux1_compatible = True" >/usr/local/lib/python3.7/_manylinux.py
 RUN pip install --no-cache-dir pipenv==2018.11.26
 
 FROM pipenv as builder
@@ -11,12 +12,12 @@ COPY LICENSE /app/
 COPY Pipfile* /app/
 COPY .coveragerc /app/
 WORKDIR /app
-RUN pipenv sync
+RUN pipenv install --skip-lock
 
 FROM builder as test
 LABEL image=test
 COPY tests /app/tests
-RUN pipenv sync --dev \
+RUN pipenv install --dev \
     && pipenv run pytest \
     && pipenv run pylint pymlhelloworld tests \
     && pipenv run flake8 --teamcity pymlhelloworld tests
