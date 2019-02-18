@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    image: pyml-web
+    restart: always
+    build: ./web
+    expose:
+      - "5000"
+    volumes:
+      - model_info:/app/model_info
+    command: pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld:app
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/pyml.conf:/etc/nginx/conf.d/default.conf
+      - model_info:/app/model_info
+volumes:
+  model_info:
