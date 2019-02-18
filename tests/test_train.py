@@ -63,13 +63,21 @@ def test_data_from_url():
     pred = testee.pipeline.predict(data.drop('Name', 1))
     assert f1_score(data['Name'], pred, average='micro') >= 0.95
 
-@patch.object(sys, 'argv', ['http://the.url/test.csv',
-                            'tmppickle.pkl', 'header'])
+
+@patch.object(sys, 'argv', ['train',
+                            'http://the.url/test.csv',
+                            'tmppickle.pkl',
+                            'tmptrainpickle.pkl',
+                            'tmpvalidpickle.pkl',
+                            'header'])
 @patch('pymlhelloworld.pipeline.init_pipeline')
 @patch('pymlhelloworld.train.read_data')
 def test_main(myreaddata, init_pipeline):
     """Test for main method."""
     # arrange
+    removefile('tmppickle.pkl')
+    removefile('tmptrainpickle.pkl')
+    removefile('tmpvalidpickle.pkl')
     pipeline = Pipeline([
         ('feature_selection', SelectKBest(chi2, k=2)),
         ('classification', RandomForestClassifier())
@@ -78,7 +86,7 @@ def test_main(myreaddata, init_pipeline):
     iris = datasets.load_iris()
     # pylint: disable=E1101
     data = pd.DataFrame(iris.data)
-    data['target'] = iris.target
+    data['loan_status'] = iris.target
     myreaddata.return_value = data
 
     # act
@@ -88,8 +96,12 @@ def test_main(myreaddata, init_pipeline):
     try:
         # assert
         assert os.path.exists('tmppickle.pkl')
+        assert os.path.exists('tmptrainpickle.pkl')
+        assert os.path.exists('tmpvalidpickle.pkl')
     finally:
         removefile('tmppickle.pkl')
+        removefile('tmptrainpickle.pkl')
+        removefile('tmpvalidpickle.pkl')
 
 
 def removefile(filename):

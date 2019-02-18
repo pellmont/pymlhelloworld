@@ -25,7 +25,8 @@ RUN pipenv run pytest \
 FROM test as train
 LABEL image=train
 COPY tests /app/tests
-RUN pipenv run jupyter nbconvert --to html --stdout model_info/model.ipynb > model_info/index.html
+RUN pipenv run python -m pymlhelloworld.train http://www.ppo2.ch/loan.csv /app/model.pkl
+RUN pipenv run jupyter nbconvert --to html --stdout --execute model_info/model.ipynb --TagRemovePreprocessor.remove_input_tags={\"invisible\"} --TagRemovePreprocessor.remove_all_outputs_tags={\"invisible\"} --TagRemovePreprocessor.remove_input_tags={\"output\"} > model_info/index.html
 
 
 # pytest should be called with --real-model parameter
