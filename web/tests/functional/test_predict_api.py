@@ -7,18 +7,7 @@ import pytest  # noqa
 
 from pymlhelloworld import app
 from pymlhelloworld import model
-
-
-valid_data = {
-    'home_ownership': True,
-    'purpose': 'some purpose',
-    'addr_state': 'some state',
-    'loan_amnt': 1.0,
-    'installement': 1,
-    'annual_income': 1.0,
-    'int_rate': 1.0,
-    'emp_lenght': 1,
-}
+from pymlhelloworld.api.healthcheck import expected_response, test_payload
 
 
 @pytest.fixture(scope="module")
@@ -37,13 +26,16 @@ def test_success_real_model(client, ep_url, real_model):
         with patch.object(
                 model.PredictionModel,
                 'predict',
-                return_value=model.Prediction(True, 0.5)) as mock_method:
-            response = client.post(ep_url, data=valid_data)
+                return_value=model.Prediction(
+                    expected_response['good_loan'],
+                    expected_response['confidence'])) as mock_method:
+            response = client.post(ep_url, data=test_payload)
             assert response.status_code == 200
             # Assert that the predict method was called with test data.
-            assert dict(mock_method.call_args[0][0]) == valid_data
+            assert dict(mock_method.call_args[0][0]) == test_payload
+            assert response.json == expected_response
     else:
-        response = client.post(ep_url, data=valid_data)
+        response = client.post(ep_url, data=test_payload)
         assert response.status_code == 200
 
 
@@ -53,7 +45,7 @@ def test_invalid_parameter_type(client, ep_url):
     Test that invalid parameter type will be rejected with the proper HTTP
     reponse code and message.
     """
-    invalid_type = dict(valid_data)
+    invalid_type = dict(test_payload)
     # Make parameter type bool instead of int
     invalid_type['installement'] = True
     response = client.post(ep_url, data=invalid_type)
@@ -68,7 +60,7 @@ def test_missing_required_parameter(client, ep_url):
     Test that payload with missing parameter will be rejected with the proper
     HTTP reponse code and message.
     """
-    missing_param = dict(valid_data)
+    missing_param = dict(test_payload)
     del missing_param['installement']
     response = client.post(ep_url, data=missing_param)
     assert response.status_code == 400

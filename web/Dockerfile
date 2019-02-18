@@ -9,7 +9,6 @@ ENV PIPENV_VENV_IN_PROJECT=True
 COPY setup.* /app/
 COPY pymlhelloworld /app/pymlhelloworld/
 COPY model_info /app/model_info
-COPY LICENSE /app/
 COPY Pipfile* /app/
 COPY .coveragerc /app/
 WORKDIR /app

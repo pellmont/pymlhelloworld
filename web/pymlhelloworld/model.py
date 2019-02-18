@@ -1,5 +1,6 @@
-# pylint: disable= R0903,R0201
+# pylint: disable= R0903,R0201,W0613
 """Prediction model implementation."""
+from .api.healthcheck import expected_response
 
 
 class Prediction:
@@ -23,8 +24,7 @@ class PredictionModel:
         """Load the persisted trained model."""
 
     def predict(self, input_args):
-        """
-        Return prediction based on the input arguments.
+        """Return prediction based on the input arguments.
 
         :param input_args: The input data arguments.
         :type input_args: dict
@@ -34,4 +34,5 @@ class PredictionModel:
         """
         # Return some dummy data at the moment until we implement the proper
         # model. This is here to be able to test swagger UI.
-        return Prediction(True, input_args['annual_income'])
+        return Prediction(expected_response['good_loan'],
+                          expected_response['confidence'])
