@@ -6,8 +6,8 @@ from flask import url_for
 import pytest  # noqa
 
 from pymlhelloworld import app
-from pymlhelloworld.model import Prediction
 from pymlhelloworld.api.healthcheck import expected_response, test_payload
+from pymlhelloworld.model import Prediction
 
 
 @pytest.fixture(scope="module")

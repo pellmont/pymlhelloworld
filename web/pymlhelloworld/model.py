@@ -5,8 +5,8 @@ Prediction model loads persisted state from the training process and use
 model to do the prediction.
 
 """
-import pickle
 import logging
+import pickle
 
 import pandas as pd
 
@@ -24,7 +24,7 @@ except FileNotFoundError:
     # stage. Dummy model will be used in that case.
     # During real testing stage the test will fail if the model
     # is not loaded.
-    logger.warn('Warning: model.pkl not loaded.')
+    logger.warning('Warning: model.pkl not loaded.')
 
 
 class Prediction:

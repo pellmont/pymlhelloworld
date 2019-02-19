@@ -1,7 +1,8 @@
+# pylint: disable=W0621
 """pytest configuration. E.g. fixtures for all tests."""
 
-import time
 import logging
+import time
 from multiprocessing import Process
 
 import pytest

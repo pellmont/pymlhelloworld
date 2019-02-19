@@ -55,5 +55,4 @@ class Predict(Resource):
         # Parses and validates input arguments
         # In case of validation error HTTP 400 will be returned
         data = predict_parser.parse_args()
-        print("PREDICT-post-parse-ok")
         return model.predict(data), 200
