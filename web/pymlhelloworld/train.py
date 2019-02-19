@@ -17,17 +17,21 @@ import pymlhelloworld.pipeline
 class ModelTrainer():
     """Constructor takes a preconfigured Pipeline."""
 
-    def __init__(self, pipeline, target_col):
+    def __init__(self, pipeline, target_col, input_features):
         """Constructor."""
         self.pipeline = sklearn.base.clone(pipeline)
         self.target_col = target_col
+        self.input_features = input_features
         self.metrics = None
         self.traindata = None
         self.validdata = None
 
     def train(self, data):
         """Trains and evaluates the model."""
-        train, valid = train_test_split(data,
+        all_fields = self.input_features + [self.target_col]
+        print(all_fields)
+        print(data.columns)
+        train, valid = train_test_split(data[all_fields],
                                         test_size=0.25,
                                         random_state=111)
         self.traindata = train
@@ -87,7 +91,8 @@ def main():
     data = read_data(sys.argv[1], headers)
     data['loan_status'] = data['loan_status'] == 'Fully Paid'
     trainer = ModelTrainer(pymlhelloworld.pipeline.init_pipeline(),
-                           'loan_status')
+                           'loan_status',
+                           pymlhelloworld.pipeline.features)
     trainer.train(data)
     trainer.write_pickled_model(sys.argv[2])
     trainer.write_pickled_trainset(sys.argv[3])
