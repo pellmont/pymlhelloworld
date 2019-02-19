@@ -31,15 +31,15 @@ class PredictionModel:
     model to do the prediction.
     """
 
-    _pipeline = None
+    pipeline = None
 
     @classmethod
     def load_model(cls):
-        """Loads model from pickle. Model is kept on the class level."""
-        if cls._pipeline is None:
+        """Load model from pickle. Model is kept on the class level."""
+        if cls.pipeline is None:
             try:
                 with open('model.pkl', 'rb') as f:
-                    cls._pipeline = pickle.load(f)
+                    cls.pipeline = pickle.load(f)
             except FileNotFoundError:
                 # Pickled model file doesn't exist during fast testing
                 # stage. Dummy model will be used in that case.
@@ -65,10 +65,10 @@ class PredictionModel:
 
         from pymlhelloworld import app
         if 'FAKE_MODEL' not in app.config:
-            prediction = cls._pipeline.predict(input_frame)
+            prediction = cls.pipeline.predict(input_frame)
             import numpy as np
-            probas = cls._pipeline.predict_proba(input_frame)[0]
-            proba = probas[np.where(cls._pipeline.classes_ == prediction[0])]
+            probas = cls.pipeline.predict_proba(input_frame)[0]
+            proba = probas[np.where(cls.pipeline.classes_ == prediction[0])]
             return Prediction(prediction[0], proba)
 
         return Prediction(expected_response['good_loan'],
