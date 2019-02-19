@@ -13,6 +13,7 @@ from sklearn.feature_selection import chi2
 from sklearn.metrics import f1_score
 from sklearn.pipeline import Pipeline
 
+import pymlhelloworld.pipeline
 from pymlhelloworld.train import ModelTrainer
 from pymlhelloworld.train import main
 from pymlhelloworld.train import read_data
@@ -29,9 +30,9 @@ def test_train_and_pickle():
     ])
     iris = datasets.load_iris()
     # pylint: disable=E1101
-    data = pd.DataFrame(iris.data)
+    data = pd.DataFrame(iris.data, columns=iris.feature_names)
     data['target'] = iris.target
-    testee = ModelTrainer(pipeline, 'target')
+    testee = ModelTrainer(pipeline, 'target', iris.feature_names)
 
     try:
         # act
@@ -51,7 +52,10 @@ def test_data_from_url():
         ('feature_selection', SelectKBest(chi2, k=2)),
         ('classification', RandomForestClassifier())
     ])
-    testee = ModelTrainer(pipeline, 'Name')
+    testee = ModelTrainer(pipeline, 'Name', ['SepalLength',
+                                             'SepalWidth',
+                                             'PetalLength',
+                                             'PetalWidth'])
 
     # act
     url = ('https://raw.githubusercontent.com/'
@@ -70,6 +74,9 @@ def test_data_from_url():
                             'tmptrainpickle.pkl',
                             'tmpvalidpickle.pkl',
                             'header'])
+@patch.object(pymlhelloworld.pipeline, 'features',
+              ['sepal length (cm)', 'sepal width (cm)',
+               'petal length (cm)', 'petal width (cm)'])
 @patch('pymlhelloworld.pipeline.init_pipeline')
 @patch('pymlhelloworld.train.read_data')
 def test_main(myreaddata, init_pipeline):
@@ -85,7 +92,7 @@ def test_main(myreaddata, init_pipeline):
     init_pipeline.return_value = pipeline
     iris = datasets.load_iris()
     # pylint: disable=E1101
-    data = pd.DataFrame(iris.data)
+    data = pd.DataFrame(iris.data, columns=iris.feature_names)
     data['loan_status'] = iris.target
     myreaddata.return_value = data
 
