@@ -23,7 +23,7 @@ def test_success_real_model(client, ep_url, real_model):
     if not real_model:
         # If we are not running test with the real model we shall use a mocked
         # version.
-        with patch('pymlhelloworld.model.predict',
+        with patch('pymlhelloworld.model.PredictionModel.predict',
                    return_value=Prediction(
                        expected_response['good_loan'],
                        expected_response['confidence'])) as mock_method:
