@@ -1,6 +1,7 @@
 """pytest configuration. E.g. fixtures for all tests."""
 
 import time
+import logging
 from multiprocessing import Process
 
 import pytest
@@ -12,6 +13,8 @@ from pymlhelloworld import app
 DEBUG_STANDALONE = False
 
 PORT = 15000
+
+logging.basicConfig(level=logging.WARN)
 
 
 def pytest_addoption(parser):

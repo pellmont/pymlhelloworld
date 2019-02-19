@@ -6,7 +6,7 @@ from flask import url_for
 import pytest  # noqa
 
 from pymlhelloworld import app
-from pymlhelloworld import model
+from pymlhelloworld.model import Prediction
 from pymlhelloworld.api.healthcheck import expected_response, test_payload
 
 
@@ -23,18 +23,15 @@ def test_success_real_model(client, ep_url, real_model):
     if not real_model:
         # If we are not running test with the real model we shall use a mocked
         # version.
-        with patch.object(model.PredictionModel, 'load_model'):
-            with patch.object(
-                    model.PredictionModel,
-                    'predict',
-                    return_value=model.Prediction(
-                        expected_response['good_loan'],
-                        expected_response['confidence'])) as mock_method:
-                response = client.post(ep_url, data=test_payload)
-                assert response.status_code == 200
-                # Assert that the predict method was called with test data.
-                assert dict(mock_method.call_args[0][0]) == test_payload
-                assert response.json == expected_response
+        with patch('pymlhelloworld.model.predict',
+                   return_value=Prediction(
+                       expected_response['good_loan'],
+                       expected_response['confidence'])) as mock_method:
+            response = client.post(ep_url, data=test_payload)
+            assert response.status_code == 200
+            # Assert that the predict method was called with test data.
+            assert dict(mock_method.call_args[0][0]) == test_payload
+            assert response.json == expected_response
     else:
         response = client.post(ep_url, data=test_payload)
         assert response.status_code == 200

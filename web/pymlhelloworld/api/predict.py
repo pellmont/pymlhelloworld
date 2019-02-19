@@ -3,7 +3,7 @@ from collections import namedtuple
 
 from flask_restplus import Namespace, Resource, fields
 
-from pymlhelloworld.model import PredictionModel
+from pymlhelloworld import model
 
 api = Namespace('predict', description='Prediction related operations')
 
@@ -55,5 +55,5 @@ class Predict(Resource):
         # Parses and validates input arguments
         # In case of validation error HTTP 400 will be returned
         data = predict_parser.parse_args()
-        p_model = PredictionModel()
-        return p_model.predict(data), 200
+        print("PREDICT-post-parse-ok")
+        return model.predict(data), 200

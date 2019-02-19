@@ -1,10 +1,28 @@
 # pylint: disable= R0903,R0201,W0613
-"""Prediction model implementation."""
+"""Prediction model used by the service.
+
+Prediction model loads persisted state from the training process and use
+model to do the prediction.
+
+"""
 import pickle
+import logging
 
 import pandas as pd
 
-from .api.healthcheck import expected_response
+
+logger = logging.getLogger(__name__)
+
+pipeline = None
+try:
+    with open('model.pkl', 'rb') as f:
+        pipeline = pickle.load(f)
+except FileNotFoundError:
+    # Pickled model file doesn't exist during fast testing
+    # stage. Dummy model will be used in that case.
+    # During real testing stage the test will fail if the model
+    # is not loaded.
+    logger.warn('Warning: model.pkl not loaded.')
 
 
 class Prediction:
@@ -16,37 +34,22 @@ class Prediction:
         self.confidence = confidence
 
 
-class PredictionModel:
-    """Prediction model used by the service.
+def predict(input_args):
+    """Return prediction based on the input arguments.
 
-    Prediction model loads persisted state from the training process and use
-    model to do the prediction.
+    :param input_args: The input data arguments.
+    :type input_args: dict
 
+    :return: the Prediction object.
+    :rtype: Prediction
     """
+    import pudb;pudb.set_trace()
+    from .api.predict import api_model_name_mapping
+    predict_dict = {api_model_name_mapping.get(k, k): v
+                    for k, v in input_args.items()}
+    input_frame = pd.DataFrame(predict_dict, index=[0])
 
-    def __init__(self):
-        """Load the persisted trained model."""
-        self.load_model()
+    prediction = pipeline.predict(input_frame)
 
-    def load_model(self):
-        """Loads model from pickle."""
-        with open('model.pkl', 'rb') as f:
-            self.pipeline = pickle.load(f)
-
-    def predict(self, input_args):
-        """Return prediction based on the input arguments.
-
-        :param input_args: The input data arguments.
-        :type input_args: dict
-
-        :return: the Prediction object.
-        :rtype: Prediction
-        """
-        from .api.predict import api_model_name_mapping
-        predict_dict = {api_model_name_mapping.get(k, k): v
-                        for k, v in input_args.items()}
-        input_frame = pd.DataFrame(predict_dict, index=[0])
-        prediction = self.pipeline.predict(input_frame)
-
-        # TODO: How to get confidence?
-        return Prediction(prediction[0], 0.7)
+    # TODO: How to get confidence?
+    return Prediction(prediction[0], 0.7)
