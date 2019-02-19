@@ -43,9 +43,10 @@ class Predict(Resource):
     def post(self):
         """Call model prediction for the given parameters.
 
-        :returns: Predict model.
+        :returns: Prediction instance.
         """
         # Parses and validates input arguments
         # In case of validation error HTTP 400 will be returned
         data = predict_parser.parse_args()
-        return PredictionModel().predict(data), 200
+        p_model = PredictionModel()
+        return p_model.predict(data), 200
