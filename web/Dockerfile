@@ -39,6 +39,7 @@ MAINTAINER Pascal Pellmont <github@ppo2.ch>
 
 WORKDIR /app
 COPY --from=train /app/model_info/index.html /app/model_info/
+COPY --from=train /app/model.pkl /app/
 RUN adduser --system unicorn
 USER unicorn
 CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld:app
