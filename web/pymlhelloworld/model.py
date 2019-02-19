@@ -1,5 +1,7 @@
 # pylint: disable= R0903,R0201,W0613
 """Prediction model implementation."""
+import pickle
+
 from .api.healthcheck import expected_response
 
 
@@ -22,6 +24,12 @@ class PredictionModel:
 
     def __init__(self):
         """Load the persisted trained model."""
+        self.load_model()
+
+    def load_model(self):
+        """Loads model from pickle."""
+        with open('model.pkl', 'rb') as f:
+            self.pipeline = pickle.load(f)
 
     def predict(self, input_args):
         """Return prediction based on the input arguments.
