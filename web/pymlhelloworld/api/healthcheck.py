@@ -48,7 +48,10 @@ class Health(Resource):
         except requests.exceptions.Timeout:
             abort(500)
 
-        if r.json() != expected_response:
+        response = r.json()
+        if 'good_loan' not in response \
+           or 'confidence' not in response \
+           or response['confidence'] <= 0.5:
             abort(500)
 
         return '', 200
