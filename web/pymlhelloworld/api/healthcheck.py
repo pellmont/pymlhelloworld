@@ -18,7 +18,7 @@ test_payload = {
     'installement': 1,
     'annual_income': 1.0,
     'int_rate': 1.0,
-    'emp_lenght': 1,
+    'emp_length': 1,
 }
 
 expected_response = {

@@ -23,7 +23,7 @@ predict_input_params = (
     PredictParam('installement', type=int, required=True, help='???'),
     PredictParam('annual_income', type=float, required=True, help='???'),
     PredictParam('int_rate', type=float, required=True, help='???'),
-    PredictParam('emp_lenght', type=int, required=True, help='???'),
+    PredictParam('emp_length', type=int, required=True, help='???'),
 )
 
 predict_parser = api.parser()
