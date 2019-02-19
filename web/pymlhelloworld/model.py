@@ -10,8 +10,7 @@ import pickle
 
 import pandas as pd
 
-from . import api
-
+from .api.healthcheck import expected_response
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +44,18 @@ def predict(input_args):
     :return: the Prediction object.
     :rtype: Prediction
     """
-    predict_dict = {api.predict.api_model_name_mapping.get(k, k): v
+    from .api.predict import api_model_name_mapping
+    predict_dict = {api_model_name_mapping.get(k, k): v
                     for k, v in input_args.items()}
     input_frame = pd.DataFrame(predict_dict, index=[0])
 
-    prediction = pipeline.predict(input_frame)
+    from pymlhelloworld import app
+    if 'FAKE_MODEL' not in app.config:
+        prediction = pipeline.predict(input_frame)
+        import numpy as np
+        probas = pipeline.predict_proba(input_frame)[0]
+        proba = probas[np.where(pipeline.classes_ == prediction[0])]
+        return Prediction(prediction[0], proba)
 
-    # TODO: How to get confidence?
-    return Prediction(prediction[0], 0.7)
+    return Prediction(expected_response['good_loan'],
+                      expected_response['confidence'])
