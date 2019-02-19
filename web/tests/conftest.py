@@ -32,6 +32,12 @@ def real_model(request):
 
 
 @pytest.fixture
+def fake_model():
+    """Configure Flake application to use fake model."""
+    app.config['FAKE_MODEL'] = True
+
+
+@pytest.fixture
 def client():
     """Client for testing REST calls."""
     return app.test_client()
