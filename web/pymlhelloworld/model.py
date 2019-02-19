@@ -10,6 +10,8 @@ import logging
 
 import pandas as pd
 
+from . import api
+
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +45,7 @@ def predict(input_args):
     :return: the Prediction object.
     :rtype: Prediction
     """
-    import pudb;pudb.set_trace()
-    from .api.predict import api_model_name_mapping
-    predict_dict = {api_model_name_mapping.get(k, k): v
+    predict_dict = {api.predict.api_model_name_mapping.get(k, k): v
                     for k, v in input_args.items()}
     input_frame = pd.DataFrame(predict_dict, index=[0])
 
