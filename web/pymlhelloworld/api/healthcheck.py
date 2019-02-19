@@ -44,7 +44,7 @@ class Health(Resource):
             predict_ep)
         try:
             r = requests.post(predict_url,
-                              data=test_payload, timeout=0.02)
+                              data=test_payload, timeout=0.5)
         except requests.exceptions.Timeout:
             abort(500)
 
