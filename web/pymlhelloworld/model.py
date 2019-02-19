@@ -2,6 +2,8 @@
 """Prediction model implementation."""
 import pickle
 
+import pandas as pd
+
 from .api.healthcheck import expected_response
 
 
@@ -40,7 +42,11 @@ class PredictionModel:
         :return: the Prediction object.
         :rtype: Prediction
         """
-        # Return some dummy data at the moment until we implement the proper
-        # model. This is here to be able to test swagger UI.
-        return Prediction(expected_response['good_loan'],
-                          expected_response['confidence'])
+        from .api.predict import api_model_name_mapping
+        predict_dict = {api_model_name_mapping.get(k, k): v
+                        for k, v in input_args.items()}
+        input_frame = pd.DataFrame(predict_dict, index=[0])
+        prediction = self.pipeline.predict(input_frame)
+
+        # TODO: How to get confidence?
+        return Prediction(prediction[0], 0.7)

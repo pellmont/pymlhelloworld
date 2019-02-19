@@ -26,6 +26,13 @@ predict_input_params = (
     PredictParam('emp_length', type=int, required=True, help='???'),
 )
 
+# If the feature names from the model differs from the names used in API
+# specify here the mapping. If mapping is not found in this dict the same name
+# is used to do the prediction.
+api_model_name_mapping = {
+    'annual_income': 'annual_inc'
+}
+
 predict_parser = api.parser()
 for param in predict_input_params:
     predict_parser.add_argument(param.name,
