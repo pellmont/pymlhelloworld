@@ -23,8 +23,15 @@ predict_input_params = (
     PredictParam('installement', type=int, required=True, help='???'),
     PredictParam('annual_income', type=float, required=True, help='???'),
     PredictParam('int_rate', type=float, required=True, help='???'),
-    PredictParam('emp_lenght', type=int, required=True, help='???'),
+    PredictParam('emp_length', type=int, required=True, help='???'),
 )
+
+# If the feature names from the model differs from the names used in API
+# specify here the mapping. If mapping is not found in this dict the same name
+# is used to do the prediction.
+api_model_name_mapping = {
+    'annual_income': 'annual_inc'
+}
 
 predict_parser = api.parser()
 for param in predict_input_params:
@@ -43,9 +50,9 @@ class Predict(Resource):
     def post(self):
         """Call model prediction for the given parameters.
 
-        :returns: Predict model.
+        :returns: Prediction instance.
         """
         # Parses and validates input arguments
         # In case of validation error HTTP 400 will be returned
         data = predict_parser.parse_args()
-        return PredictionModel().predict(data), 200
+        return PredictionModel.predict(data), 200

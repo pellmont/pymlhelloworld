@@ -18,7 +18,7 @@ test_payload = {
     'installement': 1,
     'annual_income': 1.0,
     'int_rate': 1.0,
-    'emp_lenght': 1,
+    'emp_length': 1,
 }
 
 expected_response = {
@@ -44,11 +44,14 @@ class Health(Resource):
             predict_ep)
         try:
             r = requests.post(predict_url,
-                              data=test_payload, timeout=0.02)
+                              data=test_payload, timeout=0.5)
         except requests.exceptions.Timeout:
             abort(500)
 
-        if r.json() != expected_response:
+        response = r.json()
+        if 'good_loan' not in response \
+           or 'confidence' not in response \
+           or response['confidence'] <= 0.5:
             abort(500)
 
         return '', 200

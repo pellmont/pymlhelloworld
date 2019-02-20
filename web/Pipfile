@@ -26,7 +26,6 @@ Flask = "==1.0.2"
 flask-restplus = "==0.12.1"
 gunicorn = "==19.9.0"
 requests = "==2.21.0"
-pymlhelloworld = {editable = true,path = "."}
 numpy = "==1.16.0"
 scikit-learn = "==0.20.2"
 pandas = "==0.24.0"
