@@ -26,7 +26,7 @@ def test_train_and_pickle():
     removefile(filename)
     pipeline = Pipeline([
         ('feature_selection', SelectKBest(chi2, k=2)),
-        ('classification', RandomForestClassifier())
+        ('classification', RandomForestClassifier(n_estimators=10))
     ])
     iris = datasets.load_iris()
     # pylint: disable=E1101
@@ -50,7 +50,7 @@ def test_data_from_url():
     # arrange
     pipeline = Pipeline([
         ('feature_selection', SelectKBest(chi2, k=2)),
-        ('classification', RandomForestClassifier())
+        ('classification', RandomForestClassifier(n_estimators=10))
     ])
     testee = ModelTrainer(pipeline, 'Name', ['SepalLength',
                                              'SepalWidth',
@@ -87,7 +87,7 @@ def test_main(myreaddata, init_pipeline):
     removefile('tmpvalidpickle.pkl')
     pipeline = Pipeline([
         ('feature_selection', SelectKBest(chi2, k=2)),
-        ('classification', RandomForestClassifier())
+        ('classification', RandomForestClassifier(n_estimators=10))
     ])
     init_pipeline.return_value = pipeline
     iris = datasets.load_iris()

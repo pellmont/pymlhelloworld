@@ -45,11 +45,11 @@ def test_invalid_parameter_type(client, ep_url):
     """
     invalid_type = dict(test_payload)
     # Make parameter type bool instead of int
-    invalid_type['installement'] = True
+    invalid_type['installment'] = True
     response = client.post(ep_url, data=invalid_type)
     assert response.status_code == 400
-    assert 'installement' in response.json['errors']
-    assert 'invalid literal for int' in response.json['errors']['installement']
+    assert 'installment' in response.json['errors']
+    assert 'invalid literal for int' in response.json['errors']['installment']
 
 
 def test_missing_required_parameter(client, ep_url):
@@ -59,9 +59,9 @@ def test_missing_required_parameter(client, ep_url):
     HTTP reponse code and message.
     """
     missing_param = dict(test_payload)
-    del missing_param['installement']
+    del missing_param['installment']
     response = client.post(ep_url, data=missing_param)
     assert response.status_code == 400
-    assert 'installement' in response.json['errors']
+    assert 'installment' in response.json['errors']
     assert 'Missing required parameter' \
-        in response.json['errors']['installement']
+        in response.json['errors']['installment']

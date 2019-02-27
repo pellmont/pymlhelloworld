@@ -1,9 +1,9 @@
 version: '2'
 services:
-  web:
-    image: pyml-web
+  service:
+    image: pyml-service
     restart: always
-    build: ./web
+    build: ./service
     environment:
         - PYTHONUNBUFFERED=1
     expose:

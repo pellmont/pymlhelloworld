@@ -15,7 +15,7 @@ test_payload = {
     'purpose': 'some purpose',
     'addr_state': 'some state',
     'loan_amnt': 1.0,
-    'installement': 1,
+    'installment': 1,
     'annual_income': 1.0,
     'int_rate': 1.0,
     'emp_length': 1,

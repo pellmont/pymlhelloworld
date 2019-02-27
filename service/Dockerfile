@@ -14,8 +14,11 @@ COPY setup.* /app/
 COPY pymlhelloworld /app/pymlhelloworld/
 COPY model_info /app/model_info
 COPY .coveragerc /app/
+ENV prometheus_multiproc_dir /tmpmetrics
 WORKDIR /app
-RUN pipenv install -e . --skip-lock
+RUN pipenv install -e . --skip-lock \
+    && mkdir ${prometheus_multiproc_dir} \
+    && chmod 777 ${prometheus_multiproc_dir}
 
 FROM builder as test
 LABEL image=test
@@ -40,9 +43,10 @@ MAINTAINER Pascal Pellmont <github@ppo2.ch>
 WORKDIR /app
 COPY --from=train /app/model_info/index.html /app/model_info/
 COPY --from=train /app/model.pkl /app/
+COPY gunicorn_conf.py /app/
 RUN adduser --system unicorn
 USER unicorn
-CMD pipenv run gunicorn --workers=5 --bind=0.0.0.0:5000 pymlhelloworld:app
+CMD rm -rf ${prometheus_multiproc_dir} && mkdir ${prometheus_multiproc_dir} && pipenv run gunicorn -c /app/gunicorn.conf --workers=5 --bind=0.0.0.0:5000 pymlhelloworld:app
 
 
 

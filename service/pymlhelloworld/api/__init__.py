@@ -2,6 +2,7 @@
 from flask_restplus import Api
 
 from .healthcheck import api as healthcheck_api
+from .metrics import api as metrics_api
 from .predict import api as predict_api
 
 api = Api(
@@ -12,3 +13,4 @@ api = Api(
 
 api.add_namespace(predict_api)
 api.add_namespace(healthcheck_api)
+api.add_namespace(metrics_api)

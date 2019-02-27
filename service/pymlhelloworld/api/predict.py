@@ -3,6 +3,8 @@ from collections import namedtuple
 
 from flask_restplus import Namespace, Resource, fields
 
+from prometheus_client import Histogram
+
 from pymlhelloworld.model import PredictionModel
 
 api = Namespace('predict', description='Prediction related operations')
@@ -20,7 +22,7 @@ predict_input_params = (
     PredictParam('purpose', type=str, required=True, help='???'),
     PredictParam('addr_state', type=str, required=True, help='???'),
     PredictParam('loan_amnt', type=float, required=True, help='???'),
-    PredictParam('installement', type=int, required=True, help='???'),
+    PredictParam('installment', type=int, required=True, help='???'),
     PredictParam('annual_income', type=float, required=True, help='???'),
     PredictParam('int_rate', type=float, required=True, help='???'),
     PredictParam('emp_length', type=int, required=True, help='???'),
@@ -40,6 +42,8 @@ for param in predict_input_params:
                                 required=param.required,
                                 help=param.help)
 
+LATENCY = Histogram('request_latency_seconds', 'Request Latency')
+
 
 @api.route('/')
 class Predict(Resource):
@@ -47,6 +51,7 @@ class Predict(Resource):
 
     @api.expect(predict_parser)
     @api.marshal_with(prediction)
+    @LATENCY.time()
     def post(self):
         """Call model prediction for the given parameters.
 
